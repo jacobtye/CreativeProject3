@@ -1,7 +1,5 @@
 <html>
     <head>
-        <link rel="stylesheet" href="styles.css">
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <script src="//code.jquery.com/jquery-1.10.2.js"></script>
         <script>
             /*global $*/
@@ -14,22 +12,27 @@
     </head>
     <body>
         <div id="space" v-bind:style="{ 'background-image': 'url(' + POD.hdurl + ')'}">
-            <h1>Images From Mars Rovers</h1>
+            <div id="header"></div>
             <br><br>
             <div id="rover" class="w3-half w3-card" width=50%>
             <input type="date" v-model="date">
-            <input id="rover_input" list="rover_list" v-model="rover">
-            <datalist id="rover_list">
-            <option>curiosity</option>
-            <option>opportunity</option>
-            <option>spirit</option>
-            </datalist>
+            <!--<input id="rover_input" list="rover_list" v-model="rover">-->
+            <!--<datalist id="rover_list">-->
+            <!--<option>curiosity</option>-->
+            <!--<option>opportunity</option>-->
+            <!--<option>spirit</option>-->
+            <!--</datalist>-->
+            <select v-model="rover">
+              <option value="curiosity">curiosity</option>
+              <option value="opportunity">opportunity</option>
+              <option value="spirit">spirit</option>
+            </select>
             <button v-on:click="getRoverPhotos">Submit</button>
             <!-- Slideshow container -->
             <div class="slideshow-container">
                 <div id="slideshow" ></div>
               <!-- Full-width images with number and caption text -->
-              <div class="mySlides fade" v-for="photo in current_photos">
+              <div class="mySlides fade_2" v-for="photo in current_photos">
                 <div class="numbertext">{{photo.num}} / {{rover_photos.length}}</div>
                 <img v-bind:src="photo.url" v-bind:alt="photo.earth_date" style="width:100%">
                 <div class="text"></div>
@@ -46,16 +49,24 @@
               <span class="dot" v-for="photo in current_photos" v-on:click="currentSlide(photo.num)"></span>
             </div>
             <button v-on:click="getNext10">Next 10</button>
+            <div>
+                 Date Info:<br>
+                 Curiosity landed on: 2012-08-06<br>
+                 Opportunity landed on: 2004-01-25<br>
+                 Spirit landed on: 2004-01-04<br>
+            </div>
             <br>
             <!--<button v-on:click="get10Photos">Get 10 Photos</button>-->
             </div>
             <!--<img v-bind:src="POD.hdurl" v-bind:alt="POD.title" width=200em></img>-->
             <br><br>
             <div id=footer></div>
+            
         </div>
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.2/dist/vue.js"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script src="https://unpkg.com/vue-star-rating/dist/star-rating.min.js"></script>
         <script src="app.js"></script>
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     </body>
 </html>

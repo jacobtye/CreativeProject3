@@ -89,12 +89,12 @@
   transition: background-color 0.6s ease;
 }
 
-.active, .dot:hover {
-  background-color: #717171;
+.active_2, .dot:hover {
+  background-color: #717171 !important;
 }
 
 /* Fading animation */
-.fade {
+.fade_2 {
   -webkit-animation-name: fade;
   -webkit-animation-duration: 1.5s;
   animation-name: fade;
@@ -113,7 +113,6 @@
 h1{
     text-align: center;
     margin-bottom: 100em;
-    background-color: darkblue;
     color: white !important;
     margin-top: 0 !important;
 }
@@ -130,4 +129,7 @@ h1{
 }
 #slideshow{
   text-align: center !important;
+}
+#contact{
+  background-color: white !important;
 }

@@ -45,7 +45,9 @@ let app = new Vue({
         this.current_photos = [];
         console.log("here");
         console.log(this.date);
-        console.log(this.date + 1);
+        var newDate = new Date(this.date);
+        newDate.setDate(newDate.getDate() + 1);
+        console.log(newDate.toISOString().split('T')[0]);
         const response = await axios.get(this.base_url + "/mars-photos/api/v1/rovers/"+ this.rover + "/photos?earth_date="+ this.date + "&api_key=" + this.api_key);
         console.log("got response");
         console.log(response);
@@ -126,7 +128,7 @@ let app = new Vue({
       }
       console.log("slideIndex " + this.slideIndex);
       slides[this.slideIndex-1].style.display = "block";
-      dots[this.slideIndex-1].className += " active";
+      dots[this.slideIndex-1].className += " active_2";
     },
   },
 });
