@@ -14,11 +14,12 @@ let app = new Vue({
     start_num: 0,
     current_photos: [],
     slideIndex:1,
+    curiosityMaxDate: "",
+    oppurtunityMaxDate: "",
+    spiritMaxDate: "",
   },
   created() {
-    this.getPOD();
-    this.getRoverPhotos();
-    this.loadImages();
+    this.setup();
   },
   watch: {
     rover_photos(value, oldvalue) {
@@ -30,6 +31,28 @@ let app = new Vue({
     }
   },
   methods: {
+    async setup(){
+      await this.getPOD();
+      await this.maxDates();
+      await this.getRoverPhotos();
+      await this.loadImages();
+    },
+    async maxDates(){
+      const response = await axios.get(this.base_url + "/mars-photos/api/v1/manifests/" + "curiosity" + "?&api_key=" + this.api_key);
+      console.log(response);
+      this.curiosityMaxDate = response.data.photo_manifest.max_date;
+      console.log(this.curiosityMaxDate);
+      const response2 = await axios.get(this.base_url + "/mars-photos/api/v1/manifests/" + "opportunity" + "?&api_key=" + this.api_key);
+      console.log(response2);
+      this.oppurtunityMaxDate = response2.data.photo_manifest.max_date;
+      console.log(this.curiosityMaxDate);
+      const response3 = await axios.get(this.base_url + "/mars-photos/api/v1/manifests/" + "spirit" + "?&api_key=" + this.api_key);
+      console.log(response3);
+      this.spiritMaxDate = response3.data.photo_manifest.max_date;
+      console.log(this.curiosityMaxDate);
+      this.date = this.curiosityMaxDate;
+      
+    },
     async getPOD(){
       const response = await axios.get(this.base_url + "planetary/apod?api_key=" + this.api_key);
         this.POD = {
@@ -39,7 +62,6 @@ let app = new Vue({
           hdurl: response.data.hdurl,
           title: response.data.title,
         };
-      console.log(this.POD);
     },
     async getRoverPhotos(){
         this.current_photos = [];
@@ -52,6 +74,19 @@ let app = new Vue({
         console.log("got response");
         console.log(response);
         this.rover_photos = response.data.photos;
+        if(this.rover_photos.length === 0){
+          alert("No images on " + this.date + "\nGetting most recent images.");
+          if (this.rover === "curiosity"){
+            this.date = this.curiosityMaxDate;
+          }
+          else if(this.rover === "opportunity"){
+            this.date = this.oppurtunityMaxDate;
+          }
+          else{
+            this.date = this.spiritMaxDate;
+          }
+          await this.getRoverPhotos();
+        }
     },
     async get10Photos(){
       this.current_photos = [];
@@ -62,11 +97,8 @@ let app = new Vue({
       else{
         end_num = this.start_num + 10;
       }
-      console.log(this.start_num);
-      console.log(end_num);
       let i = this.start_num;
       while (i != end_num){
-        console.log(i);
         this.current_photos.push({
           camera: this.rover_photos[i].camera,
           earth_date: this.rover_photos[i].earth_date,
@@ -114,19 +146,15 @@ let app = new Vue({
         this.slideIndex -= 10;
       }
       var slides = document.getElementsByClassName("mySlides");
-      console.log("slides " + slides.length);
-      console.log("n " + n);
       var dots = document.getElementsByClassName("dot");
-      console.log(n);
       if (n > slides.length) {this.slideIndex = 1}
       if (n < 1) {this.slideIndex = slides.length}
       for (i = 0; i < slides.length; i++) {
           slides[i].style.display = "none";
       }
       for (i = 0; i < dots.length; i++) {
-          dots[i].className = dots[i].className.replace(" active", "");
+          dots[i].className = dots[i].className.replace(" active_2", "");
       }
-      console.log("slideIndex " + this.slideIndex);
       slides[this.slideIndex-1].style.display = "block";
       dots[this.slideIndex-1].className += " active_2";
     },
